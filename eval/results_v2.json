@@ -1,0 +1,122 @@
+{
+  "Quel est le chiffre d'affaires total ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT SUM(total_amount) AS chiffre_affaires\nFROM sales;",
+    "error": null
+  },
+  "Combien de ventes y a-t-il au total ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT COUNT(*) AS total_ventes\nFROM sales;",
+    "error": null
+  },
+  "Combien de clients avons-nous ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT COUNT(*) AS nb_clients\nFROM customers;",
+    "error": null
+  },
+  "Quel est le prix moyen des produits ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT AVG(unit_price) AS prix_moyen\nFROM products;",
+    "error": null
+  },
+  "Quel est le chiffre d'affaires par région ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT r.region_name AS region,\n       SUM(s.total_amount) AS chiffre_affaires\nFROM sales s\nJOIN customers c ON s.customer_id = c.customer_id\nJOIN regions r ON c.region_id = r.region_id\nGROUP BY r.region_id, r.region_name;",
+    "error": null
+  },
+  "Quel est le chiffre d'affaires par catégorie de produit ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT p.category AS categorie,\n       SUM(s.total_amount) AS chiffre_affaires\nFROM sales s\nJOIN products p ON s.product_id = p.product_id\nGROUP BY p.category;",
+    "error": null
+  },
+  "Quel est le chiffre d'affaires par segment de clients ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT c.segment AS segment,\n       SUM(s.total_amount) AS chiffre_affaires\nFROM sales s\nJOIN customers c ON s.customer_id = c.customer_id\nGROUP BY c.segment;",
+    "error": null
+  },
+  "Quels sont les 5 produits les plus vendus en quantité ?": {
+    "correct": false,
+    "fixes": 0,
+    "generated_sql": "SELECT p.product_id,\n       p.product_name,\n       SUM(s.quantity) AS quantite_vendue\nFROM sales s\nJOIN products p ON s.product_id = p.product_id\nGROUP BY p.product_id\nORDER BY quantite_vendue DESC\nLIMIT 5;",
+    "error": null
+  },
+  "Quels sont les 3 produits qui rapportent le plus de chiffre d'affaires ?": {
+    "correct": false,
+    "fixes": 0,
+    "generated_sql": "SELECT p.product_id,\n       p.product_name,\n       SUM(s.total_amount) AS chiffre_affaires\nFROM sales s\nJOIN products p ON s.product_id = p.product_id\nGROUP BY p.product_id\nORDER BY chiffre_affaires DESC\nLIMIT 3;",
+    "error": null
+  },
+  "Combien de clients y a-t-il par région ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT r.region_name AS region, COUNT(c.customer_id) AS nb_clients\nFROM customers c\nJOIN regions r ON c.region_id = r.region_id\nGROUP BY r.region_id;",
+    "error": null
+  },
+  "Combien de clients sont des entreprises ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT COUNT(*) AS nb_clients_entreprises\nFROM customers\nWHERE segment = 'Entreprise';",
+    "error": null
+  },
+  "Quel est le chiffre d'affaires par mois en 2026 ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT strftime('%Y-%m', sale_date) AS mois,\n       SUM(total_amount) AS chiffre_affaires\nFROM sales\nWHERE strftime('%Y', sale_date) = '2026'\nGROUP BY mois\nORDER BY mois;",
+    "error": null
+  },
+  "Quelle est la quantité totale vendue par catégorie ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT p.category AS categorie,\n       SUM(s.quantity) AS quantite_totale\nFROM sales s\nJOIN products p ON s.product_id = p.product_id\nGROUP BY p.category;",
+    "error": null
+  },
+  "Quel est le panier moyen (montant moyen par vente) ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT AVG(total_amount) AS panier_moyen\nFROM sales;",
+    "error": null
+  },
+  "Quelle région a le plus grand chiffre d'affaires ?": {
+    "correct": false,
+    "fixes": 0,
+    "generated_sql": "SELECT r.region_name AS region, SUM(s.total_amount) AS chiffre_affaires\nFROM sales s\nJOIN customers c ON s.customer_id = c.customer_id\nJOIN regions r ON c.region_id = r.region_id\nGROUP BY r.region_id\nORDER BY chiffre_affaires DESC\nLIMIT 1;",
+    "error": null
+  },
+  "Quel est le chiffre d'affaires des clients de type Entreprise en Bretagne ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT SUM(s.total_amount) AS chiffre_affaires\nFROM sales s\nJOIN customers c ON s.customer_id = c.customer_id\nJOIN regions r ON c.region_id = r.region_id\nWHERE c.segment = 'Entreprise' AND r.region_name = 'Bretagne';",
+    "error": null
+  },
+  "Combien de produits y a-t-il dans chaque catégorie ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT\n    category,\n    COUNT(product_id) AS nombre_produits\nFROM products\nGROUP BY category;",
+    "error": null
+  },
+  "Quelle est la marge totale (prix de vente moins coût) sur toutes les ventes ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT SUM(sales.total_amount - products.unit_cost * sales.quantity) AS marge_totale\nFROM sales\nJOIN products ON sales.product_id = products.product_id;",
+    "error": null
+  },
+  "Quels clients ont dépensé plus de 5000 euros au total ?": {
+    "correct": false,
+    "fixes": 0,
+    "generated_sql": "SELECT c.customer_id,\n       c.customer_name,\n       SUM(s.total_amount) AS total_spent\nFROM customers c\nJOIN sales s ON c.customer_id = s.customer_id\nGROUP BY c.customer_id\nHAVING total_spent > 5000;",
+    "error": null
+  },
+  "Quel est le nombre de ventes par mois sur les 6 derniers mois ?": {
+    "correct": true,
+    "fixes": 0,
+    "generated_sql": "SELECT strftime('%Y-%m', sale_date) AS mois,\n       COUNT(sale_id) AS nombre_ventes\nFROM sales\nWHERE sale_date >= date('now', '-6 months')\nGROUP BY mois\nORDER BY mois;",
+    "error": null
+  }
+}

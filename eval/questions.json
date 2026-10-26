@@ -1,0 +1,82 @@
+[
+  {
+    "question": "Quel est le chiffre d'affaires total ?",
+    "reference_sql": "SELECT SUM(total_amount) FROM sales"
+  },
+  {
+    "question": "Combien de ventes y a-t-il au total ?",
+    "reference_sql": "SELECT COUNT(*) FROM sales"
+  },
+  {
+    "question": "Combien de clients avons-nous ?",
+    "reference_sql": "SELECT COUNT(*) FROM customers"
+  },
+  {
+    "question": "Quel est le prix moyen des produits ?",
+    "reference_sql": "SELECT AVG(unit_price) FROM products"
+  },
+  {
+    "question": "Quel est le chiffre d'affaires par région ?",
+    "reference_sql": "SELECT r.region_name, SUM(s.total_amount) FROM sales s JOIN customers c ON s.customer_id = c.customer_id JOIN regions r ON c.region_id = r.region_id GROUP BY r.region_name"
+  },
+  {
+    "question": "Quel est le chiffre d'affaires par catégorie de produit ?",
+    "reference_sql": "SELECT p.category, SUM(s.total_amount) FROM sales s JOIN products p ON s.product_id = p.product_id GROUP BY p.category"
+  },
+  {
+    "question": "Quel est le chiffre d'affaires par segment de clients ?",
+    "reference_sql": "SELECT c.segment, SUM(s.total_amount) FROM sales s JOIN customers c ON s.customer_id = c.customer_id GROUP BY c.segment"
+  },
+  {
+    "question": "Quels sont les 5 produits les plus vendus en quantité ?",
+    "reference_sql": "SELECT p.product_name, SUM(s.quantity) FROM sales s JOIN products p ON s.product_id = p.product_id GROUP BY p.product_name ORDER BY SUM(s.quantity) DESC LIMIT 5"
+  },
+  {
+    "question": "Quels sont les 3 produits qui rapportent le plus de chiffre d'affaires ?",
+    "reference_sql": "SELECT p.product_name, SUM(s.total_amount) FROM sales s JOIN products p ON s.product_id = p.product_id GROUP BY p.product_name ORDER BY SUM(s.total_amount) DESC LIMIT 3"
+  },
+  {
+    "question": "Combien de clients y a-t-il par région ?",
+    "reference_sql": "SELECT r.region_name, COUNT(*) FROM customers c JOIN regions r ON c.region_id = r.region_id GROUP BY r.region_name"
+  },
+  {
+    "question": "Combien de clients sont des entreprises ?",
+    "reference_sql": "SELECT COUNT(*) FROM customers WHERE segment = 'Entreprise'"
+  },
+  {
+    "question": "Quel est le chiffre d'affaires par mois en 2026 ?",
+    "reference_sql": "SELECT strftime('%Y-%m', sale_date), SUM(total_amount) FROM sales WHERE strftime('%Y', sale_date) = '2026' GROUP BY strftime('%Y-%m', sale_date)"
+  },
+  {
+    "question": "Quelle est la quantité totale vendue par catégorie ?",
+    "reference_sql": "SELECT p.category, SUM(s.quantity) FROM sales s JOIN products p ON s.product_id = p.product_id GROUP BY p.category"
+  },
+  {
+    "question": "Quel est le panier moyen (montant moyen par vente) ?",
+    "reference_sql": "SELECT AVG(total_amount) FROM sales"
+  },
+  {
+    "question": "Quelle région a le plus grand chiffre d'affaires ?",
+    "reference_sql": "SELECT r.region_name FROM sales s JOIN customers c ON s.customer_id = c.customer_id JOIN regions r ON c.region_id = r.region_id GROUP BY r.region_name ORDER BY SUM(s.total_amount) DESC LIMIT 1"
+  },
+  {
+    "question": "Quel est le chiffre d'affaires des clients de type Entreprise en Bretagne ?",
+    "reference_sql": "SELECT SUM(s.total_amount) FROM sales s JOIN customers c ON s.customer_id = c.customer_id JOIN regions r ON c.region_id = r.region_id WHERE c.segment = 'Entreprise' AND r.region_name = 'Bretagne'"
+  },
+  {
+    "question": "Combien de produits y a-t-il dans chaque catégorie ?",
+    "reference_sql": "SELECT category, COUNT(*) FROM products GROUP BY category"
+  },
+  {
+    "question": "Quelle est la marge totale (prix de vente moins coût) sur toutes les ventes ?",
+    "reference_sql": "SELECT SUM(s.quantity * (s.unit_price - p.unit_cost)) FROM sales s JOIN products p ON s.product_id = p.product_id"
+  },
+  {
+    "question": "Quels clients ont dépensé plus de 5000 euros au total ?",
+    "reference_sql": "SELECT c.customer_name FROM customers c JOIN sales s ON c.customer_id = s.customer_id GROUP BY c.customer_id HAVING SUM(s.total_amount) > 5000"
+  },
+  {
+    "question": "Quel est le nombre de ventes par mois sur les 6 derniers mois ?",
+    "reference_sql": "SELECT strftime('%Y-%m', sale_date), COUNT(*) FROM sales WHERE sale_date >= date('now', '-6 months') GROUP BY strftime('%Y-%m', sale_date)"
+  }
+]
